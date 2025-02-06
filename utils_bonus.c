@@ -56,12 +56,15 @@ void	exec_cmd(char *a[], t_list *args, int i, char *envp[])
 		dup2(args->pipe[i][1], 1);
 	close_all_pipes(args);
 	av = ft_split(a[i + 2 + args->o_ap], ' ');
-	if (!av[0])
-		(ft_printf("%s: permission denied: %s\n", a[0], av[0]), free(av), \
-		free_n_exit(args, 126));
-	if (execve(filename(av[0], envp), av, envp) == -1)
-		(ft_printf("%s: command not found: %s\n", a[0], av[0]), \
-		free_arr(av), free_n_exit(args, 127));
+	if (!av || !av[0])
+		(print_error(a[0], 13, av[0]), free(av), free_n_exit(args, 126));
+	if (execve(filename(av[0], envp, args), av, envp) == -1)
+	{
+		if (errno == 2)
+			(print_error(a[0], 127, av[0]), free_arr(av), free_n_exit(args, 127));
+		else
+			(print_error(a[0], errno, av[0]), free_arr(av), free_n_exit(args, 126));		
+	}
 }
 
 void	here_doc_read(char *argv[], t_list *args)
@@ -108,6 +111,6 @@ void	main_handle(char *argv[], t_list *args, char *envp[])
 		i++;
 	if (WIFEXITED(args->status))
 		free_n_exit(args, WEXITSTATUS(args->status));
-	else
-		free_n_exit(args, 1);
+	else if (WIFSIGNALED(args->status))
+		free_n_exit(args, WTERMSIG(args->status));
 }

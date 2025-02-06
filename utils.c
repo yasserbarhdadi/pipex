@@ -64,14 +64,14 @@ void	main_handle(char *argv[], t_list *args, char *envp[])
 	i = 0;
 	args->pid = (pid_t *)malloc(sizeof(pid_t) * args->ac);
 	if (!args->pid)
-		(print_error(argv[0], errno, "malloc"), exit(1));
+		exit(1);
 	if (pipe(args->pipe) == -1)
-		(print_error(argv[0], errno, "pipe"), free_n_exit(args, errno));
+		free_n_exit(args, errno);
 	while (i < args->ac)
 	{
 		args->pid[i] = fork();
 		if (args->pid[i] == -1)
-			(print_error(argv[0], errno, "fork"), free_n_exit(args, errno));
+			free_n_exit(args, errno);
 		if (args->pid[i] == 0)
 			exec_cmd(argv, args, i, envp);
 		i++;

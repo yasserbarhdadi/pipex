@@ -20,10 +20,9 @@ void	check_in(char *argv[], t_list *args)
 		if (args->in == -1)
 		{
 			if (access(argv[1], F_OK) == -1)
-				ft_printf("%s: no such file or directory: %s\n", argv[0], \
-				argv[1]);
+				print_error(argv[0], errno, argv[1]);
 			else if (access(argv[1], R_OK) == -1)
-				ft_printf("%s: permission denied: %s\n", argv[0], argv[1]);
+				print_error(argv[0], errno, argv[1]);
 			free_n_exit(args, 1);
 		}
 	}
@@ -38,8 +37,7 @@ void	check_out(char *a[], t_list *args)
 	if (access(a[args->ac + 2 + args->o_ap], F_OK) == -1)
 		args->out = open(a[args->ac + 2 + args->o_ap], O_CREAT | O_WRONLY, 420);
 	else if (access(a[args->ac + 2 + args->o_ap], W_OK) == -1)
-		(ft_printf("%s: permission denied: %s\n", a[0], \
-		a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
+		(print_error(a[0], errno, a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
 	else
 	{
 		f = 512;
@@ -48,8 +46,7 @@ void	check_out(char *a[], t_list *args)
 		args->out = open(a[args->ac + 2 + args->o_ap], O_WRONLY | f);
 	}
 	if (args->out == -1)
-		(ft_printf("%s: no such file or directory: %s\n", \
-		a[0], a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
+		(print_error(a[0], errno, a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
 }
 
 static char	*get_path(char *envp[])
@@ -57,8 +54,10 @@ static char	*get_path(char *envp[])
 	char	*path;
 	int		i;
 
-	path = NULL;
 	i = 0;
+	path = NULL;
+	if (!envp)
+		return (NULL);
 	while (envp[i])
 	{
 		if (ft_strnstr(envp[i], "PATH=", 5) != NULL)
@@ -71,32 +70,29 @@ static char	*get_path(char *envp[])
 	return (path);
 }
 
-char	*filename(char *cmd, char *envp[])
+char	*filename(char *cmd, char *envp[], t_list *args)
 {
-	char	*path;
-	int		i;
-	char	**arr;
-	char	*str;
-
 	if (!ft_strchr(cmd, '/'))
 		return (cmd);
-	path = get_path(envp);
-	if (!path)
-		return (NULL);
-	arr = ft_split(path, ':');
-	i = 0;
-	while (arr[i])
+	args->path = get_path(envp);
+	if (!args->path)
+		return (cmd);
+	args->arr = ft_split(args->path, ':');
+	if (!args->arr)
+		return (cmd);
+	args->i = 0;
+	while (args->arr[args->i])
 	{
-		if (i == 0)
-			str = ft_strjoin_2(&arr[i][5], cmd);
+		if (args->i == 0)
+			args->str = ft_strjoin_2(&args->arr[args->i][5], cmd);
 		else
-			str = ft_strjoin_2(arr[i], cmd);
-		if (!access(str, F_OK | X_OK))
-			return (str);
-		free(str);
-		i++;
+			args->str = ft_strjoin_2(args->arr[args->i], cmd);
+		if (!access(args->str, F_OK))
+			return (args->str);
+		free(args->str);
+		args->i++;
 	}
-	free_arr(arr);
+	free_arr(args->arr);
 	return (cmd);
 }
 

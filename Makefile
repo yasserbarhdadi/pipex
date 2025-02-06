@@ -6,22 +6,27 @@ UTILS = ft_split.c ft_printf.c ft_printf_utils.c get_next_line.c req_utils.c req
 SRC = $(UTILS) main.c utils.c
 SRC_BONUS = $(UTILS) main_bonus.c utils_bonus.c utils2_bonus.c
 
-all: $(NAME) $(SRC)
+OBJ = $(SRC:.c=.o)
+OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
-bonus: clean $(NAME) $(SRC_BONUS)
+all: $(NAME)
 
-$(NAME): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME_BONUS): $(SRC_BONUS)
-	$(CC) $(CFLAGS) $(SRC_BONUS) -o $(NAME_BONUS)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
+
+bonus: $(OBJ_BONUS)
+	$(CC) $(OBJ_BONUS) -o $(NAME)
+	touch bonus
 
 clean:
-	@rm -f $(NAME)
+	rm -f $(OBJ) $(OBJ_BONUS) bonus
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re

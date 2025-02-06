@@ -36,3 +36,11 @@ void	free_n_exit(t_list *args, int code)
 	free(args->pid);
 	exit(code);
 }
+
+void	print_error(char *name, int code, char *err)
+{
+	if (code == 127)
+		ft_printf("%s: Command not found: %s\n", name, err);
+	else
+		ft_printf("%s: %s: %s\n", name, strerror(code), err);
+}

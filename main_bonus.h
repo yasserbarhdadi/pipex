@@ -16,6 +16,7 @@
 # include "utils.h"
 
 typedef struct s_list {
+	int		i;
 	int		in;
 	int		out;
 	int		ac;
@@ -23,15 +24,19 @@ typedef struct s_list {
 	int		o_ap;
 	int		fds[2];
 	int		status;
+	char	*path;
+	char	**arr;
+	char	*str;	
 	pid_t	*pid;
 }			t_list;
 
 void	main_handle(char *argv[], t_list *args, char *envp[]);
-char	*filename(char *cmd, char *envp[]);
+char	*filename(char *cmd, char *envp[], t_list *args);
 void	check_in(char *argv[], t_list *args);
 void	check_out(char *a[], t_list *args);
 void	here_doc_read(char *argv[], t_list *args);
 void	free_n_exit(t_list *args, int code);
 void	free_arr(char **arr);
+void	print_error(char *name, int code, char *err);
 
 #endif
