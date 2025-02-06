@@ -13,13 +13,13 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-# include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <stdarg.h>
 # include <errno.h>
+# include <string.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 11
