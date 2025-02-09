@@ -6,7 +6,7 @@
 /*   By: yabarhda <yabarhda@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 08:51:55 by yabarhda          #+#    #+#             */
-/*   Updated: 2025/02/02 15:07:57 by yabarhda         ###   ########.fr       */
+/*   Updated: 2025/02/08 09:03:54 by yabarhda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,31 @@ void	close_all_pipes(t_list *args)
 	}
 }
 
-void	exec_cmd(char *a[], t_list *args, int i, char *envp[])
+void	exec_cmd(char *a[], t_list *s, int i, char *envp[])
 {
 	char	**av;
 
 	if (i == 0)
-		(check_in(a, args), dup2(args->in, 0), close(args->in));
+		(check_in(a, s), dup2(s->in, 0), close(s->in));
 	else
-		dup2(args->pipe[i - 1][0], 0);
-	if (i == (args->ac - 1))
-		(check_out(a, args), dup2(args->out, 1), close(args->out));
+		dup2(s->pipe[i - 1][0], 0);
+	if (i == (s->ac - 1))
+		(check_out(a, s), dup2(s->out, 1), close(s->out));
 	else
-		dup2(args->pipe[i][1], 1);
-	close_all_pipes(args);
-	av = ft_split(a[i + 2 + args->o_ap], ' ');
+		dup2(s->pipe[i][1], 1);
+	close_all_pipes(s);
+	av = ft_split(a[i + 2 + s->o_ap], ' ');
 	if (!av || !av[0])
-		(print_error(a[0], 13, av[0]), free(av), free_n_exit(args, 126));
-	if (execve(filename(av[0], envp, args), av, envp) == -1)
+		(print_error(a[0], 13, av[0]), free(av), free_n_exit(s, 126));
+	if (execve(filename(av[0], envp, s), av, envp) == -1)
 	{
 		if (errno == 2)
-			(print_error(a[0], 127, av[0]), free_arr(av), free_n_exit(args, 127));
+			(print_error(a[0], 127, av[0]), free_arr(av), free_n_exit(s, 127));
 		else
-			(print_error(a[0], errno, av[0]), free_arr(av), free_n_exit(args, 126));		
+		{
+			(print_error(a[0], errno, av[0]), free_arr(av));
+			free_n_exit(s, 126);
+		}
 	}
 }
 
@@ -77,7 +80,9 @@ void	here_doc_read(char *argv[], t_list *args)
 	{
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0, 1);
-		if (!ft_strncmp(argv[2], line, ft_strlen(line) - 1))
+		if (!line)
+			break ;
+		if (!ft_strncmp(argv[2], line))
 			break ;
 		write(args->fds[1], line, ft_strlen(line));
 		free(line);

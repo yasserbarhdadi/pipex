@@ -6,7 +6,7 @@
 /*   By: yabarhda <yabarhda@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:40:08 by yabarhda          #+#    #+#             */
-/*   Updated: 2025/02/02 13:44:41 by yabarhda         ###   ########.fr       */
+/*   Updated: 2025/02/08 08:55:53 by yabarhda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		ft_putnbr_unsigned_ft(unsigned int n);
 int		ft_putnbr_ft(int n);
 int		ft_putnbr_hexa_c_ft(unsigned int n);
 int		ft_strcmp(char *s1, char *s2);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2);
 
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin_2(char const *s1, char const *s2);

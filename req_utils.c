@@ -6,7 +6,7 @@
 /*   By: yabarhda <yabarhda@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 13:55:34 by yabarhda          #+#    #+#             */
-/*   Updated: 2025/02/02 13:56:47 by yabarhda         ###   ########.fr       */
+/*   Updated: 2025/02/08 08:53:12 by yabarhda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,20 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	return (NULL);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2)
 {
 	size_t	i;
+	size_t	s1_len;
+	size_t	s2_len;
 
 	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i] && i < n)
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	if (s1_len != (s2_len - 1))
+		return (1);
+	while (s1[i] && s2[i] && s1[i] == s2[i] && i < (s2_len - 1))
 		i++;
-	if (i == n)
+	if (i == (s2_len - 1))
 		return (0);
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

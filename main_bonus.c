@@ -6,7 +6,7 @@
 /*   By: yabarhda <yabarhda@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 21:54:30 by yabarhda          #+#    #+#             */
-/*   Updated: 2025/02/02 15:17:35 by yabarhda         ###   ########.fr       */
+/*   Updated: 2025/02/08 08:57:15 by yabarhda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,23 @@ void	check_in(char *argv[], t_list *args)
 		args->in = args->fds[0];
 }
 
-void	check_out(char *a[], t_list *args)
+void	check_out(char *a[], t_list *s)
 {
 	int	f;
 
-	if (access(a[args->ac + 2 + args->o_ap], F_OK) == -1)
-		args->out = open(a[args->ac + 2 + args->o_ap], O_CREAT | O_WRONLY, 420);
-	else if (access(a[args->ac + 2 + args->o_ap], W_OK) == -1)
-		(print_error(a[0], errno, a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
+	if (access(a[s->ac + 2 + s->o_ap], F_OK) == -1)
+		s->out = open(a[s->ac + 2 + s->o_ap], O_CREAT | O_WRONLY, 420);
+	else if (access(a[s->ac + 2 + s->o_ap], W_OK) == -1)
+		(print_error(a[0], errno, a[s->ac + 2 + s->o_ap]), free_n_exit(s, 1));
 	else
 	{
 		f = 512;
-		if (args->o_ap == 1)
+		if (s->o_ap == 1)
 			f *= 2;
-		args->out = open(a[args->ac + 2 + args->o_ap], O_WRONLY | f);
+		s->out = open(a[s->ac + 2 + s->o_ap], O_WRONLY | f);
 	}
-	if (args->out == -1)
-		(print_error(a[0], errno, a[args->ac + 2 + args->o_ap]), free_n_exit(args, 1));
+	if (s->out == -1)
+		(print_error(a[0], errno, a[s->ac + 2 + s->o_ap]), free_n_exit(s, 1));
 }
 
 static char	*get_path(char *envp[])

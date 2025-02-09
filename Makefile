@@ -1,6 +1,6 @@
-NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+NAME = pipex
 
 UTILS = ft_split.c ft_printf.c ft_printf_utils.c get_next_line.c req_utils.c req_utils2.c
 SRC = $(UTILS) main.c utils.c
@@ -11,9 +11,6 @@ OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) -o $(NAME)
 
@@ -22,11 +19,12 @@ bonus: $(OBJ_BONUS)
 	touch bonus
 
 clean:
-	rm -f $(OBJ) $(OBJ_BONUS) bonus
+	rm -f $(OBJ) $(OBJ_BONUS)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) bonus
 
 re: fclean all
 
 .PHONY: all clean fclean re
+.SECONDARY: $(OBJ) $(OBJ_BONUS)
