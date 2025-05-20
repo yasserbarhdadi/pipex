@@ -49,16 +49,15 @@ This is equivalent to: `< infile ls -l | wc -l > outfile`
 - Uses `fork()` to create child processes
 - Implements `dup2()` for file descriptor redirection
 - Executes commands using `execve()`
-- Handles environment variables for command execution
 - Manages file operations with appropriate permissions
 
 ## Project Structure
 ```
 pipex/
 ├── Makefile
-├── includes/
+├── inc/
 │   └── pipex.h
-├── srcs/
+├── src/
 │   ├── main.c
 │   ├── pipex.c
 │   ├── utils.c
@@ -78,5 +77,3 @@ pipex/
 - [dup2() Function](https://man7.org/linux/man-pages/man2/dup.2.html)
 
 ---
-
-Feel free to customize this README according to your specific implementation details and project structure. Would you like me to adjust any section or add more specific information about your implementation?
